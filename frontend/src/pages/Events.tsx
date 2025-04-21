@@ -24,7 +24,7 @@ import {
   AlarmClock,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-// import { Event } from "@/data/events";
+import { DemoEvents } from "@/data/DemoData";
 import Header from "@/components/Header";
 import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -136,9 +136,10 @@ const Events = () => {
         setEvents(data);
         setError(null);
       } catch (err) {
-        setError("Failed to load events. Please try again later.");
-        console.error("Error fetching events:", err);
+        // setError("Failed to load events. Please try again later.");
+        // console.error("Error fetching events:", err);
       } finally {
+        setEvents(DemoEvents);
         setLoading(false);
       }
     };

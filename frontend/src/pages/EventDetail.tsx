@@ -27,7 +27,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
+import { DemoEvents } from "@/data/DemoData";
 interface GeographicalLocation {
   type: string;
   coordinates: [number, number]; // [longitude, latitude]
@@ -112,6 +112,8 @@ const formatTime = (timestamp) => {
 const EventDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const Demoevent = DemoEvents.find((event) => event._id === id);
+  console.log(DemoEvents);
   const [event, setEvent] = useState<Event>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -132,10 +134,12 @@ const EventDetail = () => {
 
         setError(null);
       } catch (err) {
-        setError("Failed to load event details. Please try again later.");
-        console.error("Error fetching event details:", err);
+        // setError("Failed to load event details. Please try again later.");
+        // console.error("Error fetching event details:", err);
       } finally {
+        setEvent(Demoevent);
         setLoading(false);
+        setError(null);
       }
     };
 
@@ -220,85 +224,83 @@ const EventDetail = () => {
         </Button>
       </div>
 
-      
-          {/* Hero Section */}
-          <EventHero
-            title={event.name}
-            subtitle={event.category}
-            description={event.description}
-            date={formatDate(event.eventStart)}
-            time={formatTime(event.eventStart)}
-            location={event.location}
-            imageUrl={event.photos[0]}
-            showButtons={false}
-          />
+      {/* Hero Section */}
+      <EventHero
+        title={event.name}
+        subtitle={event.category}
+        description={event.description}
+        date={formatDate(event.eventStart)}
+        time={formatTime(event.eventStart)}
+        location={event.location}
+        imageUrl={event.photos[0]}
+        showButtons={false}
+      />
 
-          {/* Event Schedule */}
-          <EventSchedule
-            title="Event Schedule"
-            subtitle="Timeline"
-            scheduleItems={event.schedule}
-          />
+      {/* Event Schedule */}
+      <EventSchedule
+        title="Event Schedule"
+        subtitle="Timeline"
+        scheduleItems={event.schedule}
+      />
 
-          {/* Registration Form or Success Message */}
-          {registrationSuccess ? (
-            <div className="py-16 bg-green-50 dark:bg-green-900/20">
-              <div className="container mx-auto px-6">
-                <div className="max-w-2xl mx-auto text-center p-8 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
-                  <div className="w-16 h-16 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg
-                      className="w-8 h-8 text-green-600 dark:text-green-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <h2 className="text-2xl font-bold mb-4">
-                    Registration Successful!
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6">
-                    Thank you for registering for {event.name}. We've sent a
-                    confirmation email with all the details.
-                  </p>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-center text-sm">
-                      <Calendar className="mr-2 h-4 w-4 text-red-500" />
-                      <span>{event.date}</span>
-                    </div>
-                    <div className="flex items-center justify-center text-sm">
-                      <Clock className="mr-2 h-4 w-4 text-red-500" />
-                      <span>{formatTime(event.eventStart)}</span>
-                    </div>
-                    <div className="flex items-center justify-center text-sm">
-                      <MapPin className="mr-2 h-4 w-4 text-red-500" />
-                      <span>{event.location}</span>
-                    </div>
-                  </div>
-                  <Button
-                    className="mt-6 bg-red-600 hover:bg-red-800 text-white"
-                    onClick={() => navigate("/events")}
-                  >
-                    Browse More Events
-                  </Button>
+      {/* Registration Form or Success Message */}
+      {registrationSuccess ? (
+        <div className="py-16 bg-green-50 dark:bg-green-900/20">
+          <div className="container mx-auto px-6">
+            <div className="max-w-2xl mx-auto text-center p-8 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg
+                  className="w-8 h-8 text-green-600 dark:text-green-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold mb-4">
+                Registration Successful!
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Thank you for registering for {event.name}. We've sent a
+                confirmation email with all the details.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-center justify-center text-sm">
+                  <Calendar className="mr-2 h-4 w-4 text-red-500" />
+                  <span>{event.date}</span>
+                </div>
+                <div className="flex items-center justify-center text-sm">
+                  <Clock className="mr-2 h-4 w-4 text-red-500" />
+                  <span>{formatTime(event.eventStart)}</span>
+                </div>
+                <div className="flex items-center justify-center text-sm">
+                  <MapPin className="mr-2 h-4 w-4 text-red-500" />
+                  <span>{event.location}</span>
                 </div>
               </div>
+              <Button
+                className="mt-6 bg-red-600 hover:bg-red-800 text-white"
+                onClick={() => navigate("/events")}
+              >
+                Browse More Events
+              </Button>
             </div>
-          ) : (
-            /* Registration Form */
-            <RegistrationForm
-              title={`Register for ${event.name}`}
-              subtitle={event.category}
-             
-            />
-          )}  
+          </div>
+        </div>
+      ) : (
+        /* Registration Form */
+        <RegistrationForm
+          title={`Register for ${event.name}`}
+          subtitle={event.category}
+        />
+      )}
     </div>
   );
 };
